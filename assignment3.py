@@ -24,7 +24,7 @@ print(len(documents))
 #print(book.split("\n\n")[2019])
 
 for i in range(len(documents)-1,0,-1):
-    if "gutenberg" in documents[i] or "Gutenberg" in documents[i]:
+    if "gutenberg" in documents[i] or "Gutenberg" in documents[i]or "GUTENBERG" in documents[i]:
         documents.pop(i)       
 
 # Part 1.4
@@ -85,4 +85,17 @@ tfidf_model = gensim.models.TfidfModel(corpus)
 
 #Part 3.2
 tfidf_corpus = tfidf_model[corpus]
-print(tfidf_corpus[0])
+
+#Part 3.3
+MatrixSim = gensim.similarities.MatrixSimilarity(tfidf_corpus)
+
+#Part 3.4
+lsi_model = gensim.models.LsiModel(tfidf_corpus, id2word=dictionary, num_topics=100)
+lsi_corpus = lsi_model[corpus]
+lsi_MatrixSim = gensim.similarities.MatrixSimilarity(lsi_corpus)
+
+#Part 3.5 
+for i in lsi_model.show_topics(3):
+    print(i)
+
+# Section 4
