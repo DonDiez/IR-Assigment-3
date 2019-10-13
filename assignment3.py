@@ -56,11 +56,11 @@ for paragraph in documents:
 f
 #Section 2
 
-#Part 2.0
+#Part 2.1
 dictionary = gensim.corpora.Dictionary(documents)
 print(dictionary)
 
-#Part 2.1
+#Part 2.2
 with open("files/stopWords.txt", "r") as f:
     for line in f:
         stopWords = line 
@@ -75,10 +75,11 @@ stop_ids = [
 dictionary.filter_tokens(stop_ids) 
 dictionary.compactify() 
 
-#Part 2.2
+#Part 2.3
 corpus = [dictionary.doc2bow(paragraph) for paragraph in documents]
-print(corpus)
 
 #Section 3
 
-#Part 3.0
+#Part 3.1
+tfidf_model = gensim.models.TfidfModel(corpus)
+print(tfidf_model)
