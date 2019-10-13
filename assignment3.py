@@ -17,9 +17,8 @@ f = codecs.open("files/text.txt", "r", "utf-8")
 # Part 1.2
 book = f.read()
 documents = book.split("\n\n")
+paragraphDocuments = documents
 
-
-print(len(documents))
 # Part 1.3
 #print(book.split("\n\n")[2019])
 
@@ -53,12 +52,10 @@ for paragraph in documents:
     for word in paragraph:
         freq[word]+=1
 
-f
-#Section 2
 
+#Section 2
 #Part 2.1
 dictionary = gensim.corpora.Dictionary(documents)
-print(dictionary)
 
 #Part 2.2
 with open("files/stopWords.txt", "r") as f:
@@ -66,7 +63,6 @@ with open("files/stopWords.txt", "r") as f:
         stopWords = line 
 stopWords = stopWords.split(",")
 
-stopword = "that"
 stop_ids = [
     dictionary.token2id[stopword]
     for stopword in stopWords
@@ -95,7 +91,63 @@ lsi_corpus = lsi_model[corpus]
 lsi_MatrixSim = gensim.similarities.MatrixSimilarity(lsi_corpus)
 
 #Part 3.5 
+print("------Relevant top 3-----")
 for i in lsi_model.show_topics(3):
     print(i)
+print("-------------------------")
 
 # Section 4
+# Part 4.1
+def preprocessing(q):
+    stemmer = PorterStemmer()
+    q = q.lower().split()
+    for wordIndex in range(len(q)):
+        q[wordIndex] = q[wordIndex].translate(str.maketrans('', '', string.punctuation)).lower()
+        q[wordIndex] = stemmer.stem(q[wordIndex].lower())
+    return q
+
+query = preprocessing("What is the function of money?")
+query = dictionary.doc2bow(query)
+
+# Part 4.2
+
+#Testing if results are correct as given in the assigment
+queryPart4_2 = dictionary.doc2bow(preprocessing("How taxes influence Economics?"))
+
+print("\n Testing values 'How taxes influence Economics?'")
+answer = "( "
+queryPart4_2 = tfidf_model[queryPart4_2]
+for tokenValue in queryPart4_2:
+    answer+= dictionary[(tokenValue[0])]+": "+str(tokenValue[1])+", "
+print(answer[:-2]+" )\n")
+
+print('q = "What is the function of money?"')
+query = tfidf_model[query]
+print(str(query)+"\n")
+
+#Part 4.3
+def getKey(item):
+    return item[1]
+
+def firstFiveLines(text,nr):
+    text = text.split("\n")
+    print("Relevant nr"+str(nr))
+    for i in range(5):
+        try:
+            print(text[i])
+        except:
+            break
+    print("\n")
+
+relevante = MatrixSim[query]
+
+rel = []
+for relevanteIndex in range(len(relevante)):
+    rel.append((relevanteIndex,relevante[relevanteIndex]))
+
+rel = sorted(rel,key=getKey,reverse=True)
+
+print("Query: "+ "What is the function of money?")
+firstFiveLines(paragraphDocuments[rel[0][0]],1)
+firstFiveLines(paragraphDocuments[rel[1][0]],2)
+firstFiveLines(paragraphDocuments[rel[2][0]],3)
