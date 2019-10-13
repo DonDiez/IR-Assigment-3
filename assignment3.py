@@ -82,4 +82,7 @@ corpus = [dictionary.doc2bow(paragraph) for paragraph in documents]
 
 #Part 3.1
 tfidf_model = gensim.models.TfidfModel(corpus)
-print(tfidf_model)
+
+#Part 3.2
+tfidf_corpus = tfidf_model[corpus]
+print(tfidf_corpus[0])
