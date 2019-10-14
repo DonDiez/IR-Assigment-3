@@ -199,25 +199,23 @@ firstFiveLines(paragraphDocuments[rel[1][0]], 2)
 firstFiveLines(paragraphDocuments[rel[2][0]], 3)
 
 # Part 4.4
-
+print("Query [LSI]: What is the function of money?\n")
 
 lsiQuery = lsi_model[query]
-topTopics = sorted(lsiQuery, key=lambda kv: - abs(kv[1]))[:3]
-print("Top 3 topics with lsi topics weights:")
-print(topTopics)
+topicsTop3 = sorted(lsiQuery, key=lambda kv: - abs(kv[1]))[:3]
+print("----------------Top 3 LSI topics---------------------")
+print(topicsTop3)
 topics = lsi_model.show_topics(100)
-for topic in topTopics:
-    print("\n")
-    print("LSI topic", topic[0], ":")
-    print(topics[topic[0]])
-
+for topic in topicsTop3:
+    print("\n[ Topic", topic[0],"]\n",topics[topic[0]])
+print("-----------------------------------------------------")
+print("\n")
 
 # find the 3 topics most relevant paragraphs according to LSI model:
 doc2similarity = enumerate(lsi_MatrixSim.get_similarities(lsiQuery))
-print("\n")
-sortedParagraphs2 = sorted(doc2similarity, key=lambda kv: -kv[1])[:3]
+relevante2 = sorted(doc2similarity, key=lambda kv: -kv[1])[:3]
 
-print("------Relevant top 3-----")
-for i in lsi_model.show_topics(3):
-    print(i)
-print("-------------------------")
+print("\n\n------LSI - Three most relevant paraghraps-----")
+for i in range(len(relevante2)):
+    firstFiveLines(paragraphDocuments[relevante2[i][0]],i+1)
+print("------------------------------------------------")
